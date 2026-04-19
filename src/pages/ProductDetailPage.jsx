@@ -10,8 +10,14 @@ export default function ProductDetailPage() {
   const [ordering, setOrdering] = useState(false);
 
   useEffect(() => {
-    getProduct(id).then(setProduct).catch(console.error).finally(() => setLoading(false));
-  }, [id]);
+  getProduct(id)
+    .then((data) => {
+      console.log("DETAIL API RESPONSE:", data);
+      setProduct(data);
+    })
+    .catch(console.error)
+    .finally(() => setLoading(false));
+}, [id]);
 
   if (loading) return (
     <div style={{ maxWidth: 1200, margin: "4rem auto", padding: "0 1.5rem", textAlign: "center" }}>
@@ -27,6 +33,8 @@ export default function ProductDetailPage() {
   );
 
   const outOfStock = product.stock === 0;
+
+  const BACKEND_URL = "https://slydex-backend.onrender.com";
 
   return (
     <main style={{ maxWidth: 1200, margin: "0 auto", padding: "2rem 1.5rem 4rem" }}>
@@ -52,8 +60,15 @@ export default function ProductDetailPage() {
           background: "var(--surface2)",
           aspectRatio: "4/3",
         }}>
-          <img src={product.image} alt={product.name}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <img
+  src={
+    product.image?.startsWith("http")
+      ? product.image
+      : `${BACKEND_URL}${product.image}`
+  }
+  alt={product.name}
+  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+/>
         </div>
 
         {/* Details */}
