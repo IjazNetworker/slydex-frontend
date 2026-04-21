@@ -56,13 +56,13 @@ export default function ProductCard({ product, onOrder }) {
             }} />
 
           {/* Brand badge */}
-          <span style={{
+          {/* <span style={{
             position: "absolute", top: 12, left: 12,
             background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)",
             color: "var(--text-muted)", fontSize: 11, fontWeight: 600,
             letterSpacing: 1.5, padding: "4px 10px", borderRadius: 999,
             textTransform: "uppercase",
-          }}>{product.brand}</span>
+          }}>{product.brand}</span> */}
 
           {/* Discount badge */}
           {showDiscount && !outOfStock && (
