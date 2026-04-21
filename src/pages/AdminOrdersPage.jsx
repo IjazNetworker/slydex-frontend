@@ -24,22 +24,29 @@ export default function AdminOrdersPage() {
   };
 
   useEffect(() => {
-    fetchOrders(statusFilter);
-  }, [statusFilter]);
+  fetchOrders(statusFilter);
 
-  const handleStatusChange = async (id, newStatus) => {
-    setUpdating(id);
-    try {
-      const updated = await updateOrder(id, newStatus);
-      setOrders((prev) =>
-        prev.map((o) => (o.id === id ? { ...o, status: updated.status } : o))
-      );
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setUpdating(null);
-    }
-  };
+  const interval = setInterval(() => {
+    fetchOrders(statusFilter);
+  }, 3000); // every 3 seconds
+
+  return () => clearInterval(interval);
+}, [statusFilter]);
+
+ const handleStatusChange = async (id, newStatus) => {
+  setUpdating(id);
+  try {
+    await updateOrder(id, newStatus);
+
+    // 🔥 ADD THIS LINE
+    fetchOrders(statusFilter);
+
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setUpdating(null);
+  }
+};
 
   const allOrders = orders;
   const pendingCount   = orders.filter((o) => o.status === "pending").length;
