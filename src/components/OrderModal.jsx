@@ -32,7 +32,7 @@ export default function OrderModal({ product, onClose }) {
 
   const BACKEND_URL = "https://slydex-backend.onrender.com";
 
-  const handleSubmit = async () => {
+ const handleSubmit = async () => {
     const e = validate();
     if (Object.keys(e).length) { setErrors(e); return; }
 
@@ -41,6 +41,28 @@ export default function OrderModal({ product, onClose }) {
     const address = addressRef.current.value.trim();
     const qty = Number(qtyRef.current.value);
     const totalRaw = salesPrice * qty;
+
+    // ✅ Build WhatsApp URL before async call
+    const msg = encodeURIComponent(
+      `🛍️ *New Order - SLYDEX*\n\n` +
+      `📦 *Product:* ${product.name}\n` +
+      `🏷️ *Brand:* ${product.brand}\n` +
+      `🔢 *Quantity:* ${qty}\n` +
+      `💰 *Total:* ₹${totalRaw.toLocaleString("en-IN")}\n\n` +
+      `👤 *Customer Details*\n` +
+      `Name: ${name}\n` +
+      `Phone: ${phone}\n` +
+      `Address: ${address}\n\n` +
+      `Please confirm my order. Thank you! 🙏`
+    );
+
+    // ✅ Sanitize whatsapp number — strip spaces/+/- and add 91 if needed
+    const rawNumber = String(product.whatsapp_number).replace(/[\s+\-()]/g, "");
+    const waNumber = rawNumber.startsWith("91") ? rawNumber : `91${rawNumber}`;
+    const waURL = `https://wa.me/${waNumber}?text=${msg}`;
+
+    // ✅ Open WhatsApp immediately (synchronous — not blocked by browser)
+    const waWindow = window.open(waURL, "_blank");
 
     setLoading(true);
     try {
@@ -55,25 +77,17 @@ export default function OrderModal({ product, onClose }) {
 
       setSuccess(true);
 
-      const msg = encodeURIComponent(
-        `🛍️ *New Order - SLYDEX*\n\n` +
-        `📦 *Product:* ${product.name}\n` +
-        `🏷️ *Brand:* ${product.brand}\n` +
-        `🔢 *Quantity:* ${qty}\n` +
-        `💰 *Total:* ₹${totalRaw.toLocaleString("en-IN")}\n\n` +
-        `👤 *Customer Details*\n` +
-        `Name: ${name}\n` +
-        `Phone: ${phone}\n` +
-        `Address: ${address}\n\n` +
-        `Please confirm my order. Thank you! 🙏`
-      );
+      // ✅ Fallback — if popup was blocked, try again after success
+      if (!waWindow || waWindow.closed) {
+        window.open(waURL, "_blank");
+      }
 
-      setTimeout(() => {
-        window.open(`https://wa.me/${product.whatsapp_number}?text=${msg}`, "_blank");
-        onClose();
-      }, 1500);
+      setTimeout(() => onClose(), 2000);
+
     } catch (err) {
-      setErrors(err);
+      // ✅ If order save fails, still WhatsApp was already opened
+      // Just show the error on form
+      setErrors(typeof err === "object" ? err : { general: "Order failed. But WhatsApp opened!" });
     } finally {
       setLoading(false);
     }
