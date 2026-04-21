@@ -30,6 +30,8 @@ export default function OrderModal({ product, onClose }) {
     return e;
   };
 
+  const BACKEND_URL = "https://slydex-backend.onrender.com";
+
   const handleSubmit = async () => {
     const e = validate();
     if (Object.keys(e).length) { setErrors(e); return; }
@@ -173,7 +175,11 @@ export default function OrderModal({ product, onClose }) {
               padding: "12px", marginBottom: "1.25rem",
               border: "1px solid var(--border)",
             }}>
-              <img src={product.image} alt={product.name}
+              <img src={
+    product.image?.startsWith("http")
+      ? product.image
+      : `${BACKEND_URL}${product.image}`
+  } alt={product.name}
                 style={{ width: 64, height: 64, borderRadius: 8, objectFit: "cover" }} />
               <div style={{ flex: 1 }}>
                 <p style={{ fontSize: 13, color: "var(--text-muted)" }}>{product.brand}</p>
