@@ -23,14 +23,8 @@ export default function AdminOrdersPage() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(() => {
+ useEffect(() => {
   fetchOrders(statusFilter);
-
-  const interval = setInterval(() => {
-    fetchOrders(statusFilter);
-  }, 3000); // every 3 seconds
-
-  return () => clearInterval(interval);
 }, [statusFilter]);
 
  const handleStatusChange = async (id, newStatus) => {
