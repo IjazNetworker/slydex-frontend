@@ -5,6 +5,10 @@ import HomePage from "./pages/HomePage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import "./index.css";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
+import Login from "./pages/Login";
+
+const isAdmin = localStorage.getItem("isAdmin") === "true";
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -13,6 +17,8 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/admin/orders" element={<AdminOrdersPage />} />
+        {/* Login */}
+        <Route path="/login" element={<Login />} />
       </Routes>
       <Footer />
     </BrowserRouter>
