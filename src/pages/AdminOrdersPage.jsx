@@ -186,9 +186,9 @@ export default function AdminOrdersPage() {
           {orders.map((order) => {
             const s = STATUS_CONFIG[order.status] || STATUS_CONFIG.pending;
             const isUpdating = updating === order.id;
-            const productImg = order.product?.image?.startsWith("http")
-              ? order.product.image
-              : `${BACKEND_URL}${order.product?.image}`;
+            const productImg = order.product_details?.image?.startsWith("http")
+              ? order.product_details.image
+              : `${BACKEND_URL}${order.product_details?.image}`;
 
             return (
               <div key={order.id} style={{
@@ -218,7 +218,7 @@ export default function AdminOrdersPage() {
                 <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 160 }}>
                   <img
                     src={productImg}
-                    alt={order.product?.name}
+                    alt={order.product_details?.name}
                     style={{
                       width: 48, height: 48,
                       borderRadius: 8, objectFit: "cover",
@@ -232,7 +232,7 @@ export default function AdminOrdersPage() {
                       Product
                     </p>
                     <p style={{ fontWeight: 600, fontSize: 14 }}>
-                      {order.product?.name ?? "—"}
+                      {order.product_details?.name ?? "—"}
                     </p>
                     <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
                       Qty: <strong style={{ color: "var(--text)" }}>{order.quantity}</strong>
