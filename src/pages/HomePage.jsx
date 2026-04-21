@@ -157,7 +157,7 @@ export default function HomePage() {
           }} />
 
           {/* Min price */}
-          <input
+          {/* <input
             type="number"
             placeholder="Min ₹"
             value={priceRange.min}
@@ -171,10 +171,10 @@ export default function HomePage() {
             onFocus={(e) => (e.target.style.borderColor = "var(--accent)")}
             onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
           />
-          <span style={{ color: "var(--text-muted)", fontSize: 13 }}>—</span>
+          <span style={{ color: "var(--text-muted)", fontSize: 13 }}>—</span> */}
 
           {/* Max price */}
-          <input
+          {/* <input
             type="number"
             placeholder="Max ₹"
             value={priceRange.max}
@@ -187,7 +187,7 @@ export default function HomePage() {
             }}
             onFocus={(e) => (e.target.style.borderColor = "var(--accent)")}
             onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
-          />
+          /> */}
 
           {/* Clear price button */}
           {(priceRange.min || priceRange.max) && (
@@ -242,12 +242,15 @@ export default function HomePage() {
 
       {/* ── Product Grid ── */}
       {loading ? (
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-          gap: "1.25rem",
-          marginTop: "1rem",
-        }}>
+        <div
+  className="product-grid"
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+    gap: "1.25rem",
+    marginTop: "1rem",
+  }}
+>
           {[...Array(6)].map((_, i) => (
             <div key={i} style={{
               background: "var(--surface)",
@@ -292,12 +295,15 @@ export default function HomePage() {
         </div>
 
       ) : (
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-          gap: "1.25rem",
-          marginTop: "0.5rem",
-        }}>
+        <div
+  className="product-grid"
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+    gap: "1.25rem",
+    marginTop: "0.5rem",
+  }}
+>
           {filtered.map((p) => (
             <ProductCard
               key={p.id}
